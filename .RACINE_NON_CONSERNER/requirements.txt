@@ -1,9 +1,0 @@
-# ═══════════════════════════════════════════════════════════════════════════
-# DÉPENDANCES PYTHON - Gestionnaire de Rôles Discord
-# ═══════════════════════════════════════════════════════════════════════════
-
-# Library Discord.py - API Discord
-discord.py>=2.0.0
-
-# Gestion des variables d'environnement
-python-dotenv>=0.21.0
