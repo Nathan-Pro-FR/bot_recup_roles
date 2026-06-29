@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Rôles Discord</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* VARIABLES CSS ET RÉINITIALISATION */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #5865f2;
+            --color-secondary: #4752c4;
+            --color-success: #57f287;
+            --color-danger: #ed4245;
+            --color-warning: #faa61a;
+            --color-bg: #36393f;
+            --color-bg-secondary: #2f3136;
+            --color-border: #202225;
+            --color-text: #dbdee1;
+            --color-text-secondary: #72767d;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --border-radius: 0.5rem;
+            --transition: all 0.2s ease;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+                         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
+            color: var(--color-text);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* LAYOUT PRINCIPAL */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--color-primary), #7289da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* SECTION ACTIONS (BOUTONS) */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .actions-section {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-xl);
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-success {
+            background: var(--color-success);
+            color: #000;
+        }
+        
+        .btn-success:hover {
+            background: #4db876;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--color-bg-secondary);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--color-border);
+        }
+        
+        /* Input file hidden mais fonctionnel */
+        #importFile {
+            display: none;
+        }
+        
+        .file-input-label {
+            display: inline-flex;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* SECTION STATISTIQUES */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .stat-card {
+            background: var(--color-bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--color-primary);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .stat-label {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* LISTE DES RÔLES */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .roles-container {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .roles-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            max-height: 700px;
+            overflow-y: auto;
+            padding-right: var(--spacing-md);
+        }
+        
+        /* Scrollbar stylisée */
+        .roles-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .roles-list::-webkit-scrollbar-track {
+            background: var(--color-bg);
+        }
+        
+        .roles-list::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 4px;
+        }
+        
+        .roles-list::-webkit-scrollbar-thumb:hover {
+            background: var(--color-secondary);
+        }
+        
+        .role-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .role-item:hover {
+            background: linear-gradient(to right, var(--color-bg), var(--color-bg-secondary));
+            border-color: var(--color-primary);
+        }
+        
+        .role-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid var(--color-border);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .role-color:hover {
+            transform: scale(1.15);
+        }
+        
+        .role-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .role-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+            word-break: break-word;
+        }
+        
+        .role-meta {
+            display: flex;
+            gap: var(--spacing-md);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            flex-wrap: wrap;
+        }
+        
+        .role-badge {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+        
+        .role-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem var(--spacing-md);
+            font-size: 0.9rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .btn-move-up {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-move-up:hover:not(:disabled) {
+            background: var(--color-secondary);
+        }
+        
+        .btn-move-up:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .btn-move-down {
+            background: var(--color-secondary);
+            color: white;
+        }
+        
+        .btn-move-down:hover:not(:disabled) {
+            background: var(--color-primary);
+        }
+        
+        .btn-move-down:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .btn-delete {
+            background: var(--color-danger);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c03537;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--color-text-secondary);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* MODAL */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(2px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--color-bg-secondary);
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--color-border);
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: var(--spacing-md);
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: var(--color-text);
+        }
+        
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="color"] {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input[type="text"]:focus,
+        .form-group input[type="color"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+        }
+        
+        .form-group input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+        
+        .permissions-group {
+            background: var(--color-bg);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .permissions-group h3 {
+            font-size: 0.95rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .permission-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            transition: background 0.2s;
+            padding: var(--spacing-sm);
+            border-radius: 0.25rem;
+        }
+        
+        .permission-checkbox:hover {
+            background: var(--color-bg-secondary);
+        }
+        
+        .permission-checkbox input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-primary);
+        }
+        
+        .permission-checkbox label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .modal-buttons .btn {
+            flex: 1;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* NOTIFICATIONS */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .notification {
+            position: fixed;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--color-bg-secondary);
+            border-left: 4px solid var(--color-primary);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--border-radius);
+            max-width: 400px;
+            animation: slideInRight 0.3s ease;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification.success {
+            border-left-color: var(--color-success);
+        }
+        
+        .notification.error {
+            border-left-color: var(--color-danger);
+        }
+        
+        .notification.warning {
+            border-left-color: var(--color-warning);
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* RESPONSIVE - MOBILE */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .actions-section {
+                flex-direction: column;
+            }
+            
+            .actions-section .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .role-item {
+                flex-wrap: wrap;
+            }
+            
+            .role-actions {
+                width: 100%;
+                margin-top: var(--spacing-sm);
+            }
+            
+            .role-actions .btn-sm {
+                flex: 1;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: var(--spacing-lg);
+            }
+            
+            .notification {
+                left: var(--spacing-lg);
+                right: var(--spacing-lg);
+                max-width: none;
+            }
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        /* UTILITAIRES */
+        /* ═══════════════════════════════════════════════════════════════════════════════ */
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- CONTENEUR PRINCIPAL -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎭 Gestionnaire de Rôles Discord</h1>
+            <p>Importez, modifiez et exportez la configuration de vos rôles en JSON</p>
+        </div>
+        
+        <!-- Section Actions -->
+        <div class="actions-section">
+            <label class="btn btn-primary file-input-label" for="importFile">
+                📥 Importer JSON
+            </label>
+            <input type="file" id="importFile" accept=".json">
+            
+            <button class="btn btn-success" id="exportBtn" disabled>
+                📤 Exporter JSON Modifié
+            </button>
+            
+            <button class="btn btn-secondary" id="createRoleBtn" disabled>
+                ✨ Créer un Rôle
+            </button>
+        </div>
+        
+        <!-- Statistiques -->
+        <div class="stats-section" id="statsSection" style="display: none;">
+            <div class="stat-card">
+                <div class="stat-value" id="totalRoles">0</div>
+                <div class="stat-label">Rôles Totaux</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="newRoles">0</div>
+                <div class="stat-label">Rôles Nouveaux</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="permsCount">0</div>
+                <div class="stat-label">Permissions Totales</div>
+            </div>
+        </div>
+        
+        <!-- Conteneur Rôles -->
+        <div class="roles-container">
+            <div class="roles-list" id="rolesList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>Importez un fichier JSON pour commencer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- MODAL - CRÉER UN RÔLE -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    
+    <div class="modal" id="createRoleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✨ Créer un nouveau rôle</h2>
+                <button class="modal-close" id="modalCloseBtn">&times;</button>
+            </div>
+            
+            <!-- Formulaire -->
+            <form id="createRoleForm">
+                <!-- Nom du Rôle -->
+                <div class="form-group">
+                    <label for="roleName">Nom du rôle</label>
+                    <input 
+                        type="text" 
+                        id="roleName" 
+                        placeholder="Ex: Modérateur" 
+                        required 
+                        maxlength="100"
+                    >
+                </div>
+                
+                <!-- Couleur du Rôle -->
+                <div class="form-group">
+                    <label for="roleColor">Couleur</label>
+                    <input type="color" id="roleColor" value="#5865f2">
+                </div>
+                
+                <!-- Permissions -->
+                <div class="form-group">
+                    <label>Permissions</label>
+                    <div class="permissions-group">
+                        <h3>Permissions Clés</h3>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_ADMINISTRATOR" data-permission="ADMINISTRATOR">
+                            <label for="perm_ADMINISTRATOR">👑 Administrateur</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MANAGE_GUILD" data-permission="MANAGE_GUILD">
+                            <label for="perm_MANAGE_GUILD">⚙️ Gérer le serveur</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MANAGE_CHANNELS" data-permission="MANAGE_CHANNELS">
+                            <label for="perm_MANAGE_CHANNELS">📢 Gérer les salons</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MANAGE_ROLES" data-permission="MANAGE_ROLES">
+                            <label for="perm_MANAGE_ROLES">🏷️ Gérer les rôles</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MANAGE_MESSAGES" data-permission="MANAGE_MESSAGES">
+                            <label for="perm_MANAGE_MESSAGES">💬 Gérer les messages</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MANAGE_WEBHOOKS" data-permission="MANAGE_WEBHOOKS">
+                            <label for="perm_MANAGE_WEBHOOKS">🪝 Gérer les webhooks</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_KICK_MEMBERS" data-permission="KICK_MEMBERS">
+                            <label for="perm_KICK_MEMBERS">👢 Expulser des membres</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_BAN_MEMBERS" data-permission="BAN_MEMBERS">
+                            <label for="perm_BAN_MEMBERS">🚫 Bannir des membres</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MODERATE_MEMBERS" data-permission="MODERATE_MEMBERS">
+                            <label for="perm_MODERATE_MEMBERS">⏱️ Modérer les membres</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_SEND_MESSAGES" data-permission="SEND_MESSAGES">
+                            <label for="perm_SEND_MESSAGES">✍️ Envoyer des messages</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MENTION_EVERYONE" data-permission="MENTION_EVERYONE">
+                            <label for="perm_MENTION_EVERYONE">📣 Mentionner tout le monde</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_CONNECT" data-permission="CONNECT">
+                            <label for="perm_CONNECT">🎤 Se connecter aux vocaux</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_SPEAK" data-permission="SPEAK">
+                            <label for="perm_SPEAK">🔊 Parler en vocal</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_MUTE_MEMBERS" data-permission="MUTE_MEMBERS">
+                            <label for="perm_MUTE_MEMBERS">🔇 Couper les membres</label>
+                        </div>
+                        
+                        <div class="permission-checkbox">
+                            <input type="checkbox" id="perm_DEAFEN_MEMBERS" data-permission="DEAFEN_MEMBERS">
+                            <label for="perm_DEAFEN_MEMBERS">🔕 Assourdir les membres</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Boutons -->
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" id="modalCancelBtn">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Créer le rôle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- SCRIPTS -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    
+    <script>
+        /* ═════════════════════════════════════════════════════════════════════════════ */
+        /* GESTION DE L'APPLICATION */
+        /* ═════════════════════════════════════════════════════════════════════════════ */
+        
+        class RoleManager {
+            constructor() {
+                this.roles = [];
+                this.permissions = this.initializePermissions();
+                this.init();
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // INITIALISATION
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            init() {
+                // Événements des boutons
+                document.getElementById('importFile').addEventListener('change', (e) => this.handleFileImport(e));
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportJSON());
+                document.getElementById('createRoleBtn').addEventListener('click', () => this.openModal());
+                
+                // Modal
+                document.getElementById('modalCloseBtn').addEventListener('click', () => this.closeModal());
+                document.getElementById('modalCancelBtn').addEventListener('click', () => this.closeModal());
+                document.getElementById('createRoleForm').addEventListener('submit', (e) => this.handleCreateRole(e));
+                
+                // Fermer la modal en cliquant en dehors
+                document.getElementById('createRoleModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'createRoleModal') this.closeModal();
+                });
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // PERMISSIONS - MAP DISCORD.PY
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            initializePermissions() {
+                // Valeurs exactes du Bitfield Discord (discord.py)
+                return {
+                    'CREATE_INSTANT_INVITE': 1n << 0n,
+                    'KICK_MEMBERS': 1n << 1n,
+                    'BAN_MEMBERS': 1n << 2n,
+                    'ADMINISTRATOR': 1n << 3n,
+                    'MANAGE_CHANNELS': 1n << 4n,
+                    'MANAGE_GUILD': 1n << 5n,
+                    'ADD_REACTIONS': 1n << 6n,
+                    'VIEW_AUDIT_LOG': 1n << 7n,
+                    'PRIORITY_SPEAKER': 1n << 8n,
+                    'STREAM': 1n << 9n,
+                    'READ_MESSAGES': 1n << 10n,
+                    'SEND_MESSAGES': 1n << 11n,
+                    'SEND_TTS_MESSAGES': 1n << 12n,
+                    'MANAGE_MESSAGES': 1n << 13n,
+                    'EMBED_LINKS': 1n << 14n,
+                    'ATTACH_FILES': 1n << 15n,
+                    'READ_MESSAGE_HISTORY': 1n << 16n,
+                    'MENTION_EVERYONE': 1n << 17n,
+                    'USE_EXTERNAL_EMOJIS': 1n << 18n,
+                    'VIEW_GUILD_INSIGHTS': 1n << 19n,
+                    'CONNECT': 1n << 20n,
+                    'SPEAK': 1n << 21n,
+                    'MUTE_MEMBERS': 1n << 22n,
+                    'DEAFEN_MEMBERS': 1n << 23n,
+                    'MOVE_MEMBERS': 1n << 24n,
+                    'USE_VAD': 1n << 25n,
+                    'CHANGE_NICKNAME': 1n << 26n,
+                    'MANAGE_NICKNAMES': 1n << 27n,
+                    'MANAGE_ROLES': 1n << 28n,
+                    'MANAGE_WEBHOOKS': 1n << 29n,
+                    'MANAGE_EMOJIS_AND_STICKERS': 1n << 30n,
+                    'USE_APPLICATION_COMMANDS': 1n << 31n,
+                    'REQUEST_TO_SPEAK': 1n << 32n,
+                    'MANAGE_GUILD_SCHEDULED_EVENTS': 1n << 33n,
+                    'MODERATE_MEMBERS': 1n << 40n
+                };
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // CALCULER LE BITFIELD
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            calculateBitfield() {
+                let bitfield = 0n;
+                const checkboxes = document.querySelectorAll('.permission-checkbox input[type="checkbox"]:checked');
+                
+                checkboxes.forEach(checkbox => {
+                    const permission = checkbox.dataset.permission;
+                    if (this.permissions[permission]) {
+                        bitfield |= this.permissions[permission];
+                    }
+                });
+                
+                return bitfield;
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // IMPORT FICHIER JSON
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            async handleFileImport(event) {
+                const file = event.target.files[0];
+                
+                if (!file) return;
+                
+                try {
+                    const text = await file.text();
+                    this.roles = JSON.parse(text);
+                    
+                    // Trier les rôles par position (du plus haut au plus bas)
+                    this.roles.sort((a, b) => (b.position || 0) - (a.position || 0));
+                    
+                    // Activer les boutons
+                    document.getElementById('exportBtn').disabled = false;
+                    document.getElementById('createRoleBtn').disabled = false;
+                    
+                    // Afficher les statistiques
+                    this.updateStats();
+                    
+                    // Afficher la liste
+                    this.renderRoles();
+                    
+                    this.showNotification('✅ JSON importé avec succès!', 'success');
+                    
+                    console.log('📥 Fichier importé:', this.roles.length, 'rôles');
+                } catch (error) {
+                    this.showNotification('❌ Erreur lors de l\'import: ' + error.message, 'error');
+                    console.error('Erreur d\'import:', error);
+                }
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // AFFICHER LES RÔLES
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            renderRoles() {
+                const rolesList = document.getElementById('rolesList');
+                
+                if (this.roles.length === 0) {
+                    rolesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>Aucun rôle trouvé</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                rolesList.innerHTML = this.roles.map((role, index) => {
+                    const bgColor = this.getRGBfromConfig(role);
+                    const isNew = role.is_new || false;
+                    const permsCount = this.countPermissions(role.permissions_value || 0);
+                    
+                    return `
+                        <div class="role-item" data-index="${index}">
+                            <div class="role-color" style="background-color: ${bgColor};" title="${bgColor}"></div>
+                            
+                            <div class="role-info">
+                                <div class="role-name">${role.name}</div>
+                                <div class="role-meta">
+                                    <span>Position: <strong>${role.position}</strong></span>
+                                    <span>Permissions: <strong>${permsCount}</strong></span>
+                                    ${isNew ? '<span class="role-badge">✨ Nouveau</span>' : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="role-actions">
+                                <button class="btn btn-sm btn-move-up" onclick="roleManager.moveUp(${index})" 
+                                    ${index === 0 ? 'disabled' : ''}>🔼</button>
+                                <button class="btn btn-sm btn-move-down" onclick="roleManager.moveDown(${index})" 
+                                    ${index === this.roles.length - 1 ? 'disabled' : ''}>🔽</button>
+                                <button class="btn btn-sm btn-delete" onclick="roleManager.deleteRole(${index})">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // DÉPLACER UN RÔLE
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            moveUp(index) {
+                if (index > 0) {
+                    [this.roles[index], this.roles[index - 1]] = [this.roles[index - 1], this.roles[index]];
+                    this.renderRoles();
+                }
+            }
+            
+            moveDown(index) {
+                if (index < this.roles.length - 1) {
+                    [this.roles[index], this.roles[index + 1]] = [this.roles[index + 1], this.roles[index]];
+                    this.renderRoles();
+                }
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // SUPPRIMER UN RÔLE
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            deleteRole(index) {
+                const role = this.roles[index];
+                
+                // Vérifier si on supprime un rôle existant (ce qu'on ne veut pas faire)
+                if (!role.is_new) {
+                    this.showNotification('⚠️ Les rôles existants ne peuvent pas être supprimés, seulement cachés!', 'warning');
+                    return;
+                }
+                
+                if (confirm(`Êtes-vous sûr de vouloir supprimer "${role.name}"?`)) {
+                    this.roles.splice(index, 1);
+                    this.renderRoles();
+                    this.updateStats();
+                    this.showNotification('🗑️ Rôle supprimé', 'success');
+                }
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // MODAL - CRÉER UN RÔLE
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            openModal() {
+                document.getElementById('createRoleModal').classList.add('active');
+                document.getElementById('roleName').focus();
+            }
+            
+            closeModal() {
+                document.getElementById('createRoleModal').classList.remove('active');
+                document.getElementById('createRoleForm').reset();
+            }
+            
+            handleCreateRole(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('roleName').value.trim();
+                const color = document.getElementById('roleColor').value;
+                const bitfield = this.calculateBitfield();
+                
+                if (!name) {
+                    this.showNotification('❌ Veuillez entrer un nom pour le rôle', 'error');
+                    return;
+                }
+                
+                // Créer le rôle avec position maximale (sera inséré en haut)
+                const newRole = {
+                    id: Math.floor(Math.random() * 1000000),
+                    name: name,
+                    position: this.roles.length > 0 ? Math.max(...this.roles.map(r => r.position)) + 1 : 1,
+                    color: this.hexToRGB(color),
+                    hex_color: color,
+                    permissions_value: Number(bitfield),
+                    is_new: true
+                };
+                
+                // Insérer en tête (position maximale)
+                this.roles.unshift(newRole);
+                
+                this.renderRoles();
+                this.updateStats();
+                this.closeModal();
+                
+                this.showNotification(`✨ Rôle "${name}" créé avec succès!`, 'success');
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // EXPORT JSON
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            exportJSON() {
+                // Recalculer les positions (de bas en haut)
+                const updatedRoles = this.roles.map((role, index) => ({
+                    ...role,
+                    position: index
+                }));
+                
+                const json = JSON.stringify(updatedRoles, null, 4);
+                
+                // Créer un blob et télécharger
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'roles_configuration_modified.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.showNotification('📤 JSON exporté avec succès!', 'success');
+                console.log('📤 Export JSON:', updatedRoles);
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // STATISTIQUES
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            updateStats() {
+                const totalRoles = this.roles.length;
+                const newRoles = this.roles.filter(r => r.is_new).length;
+                const totalPermissions = this.roles.reduce((sum, r) => sum + this.countPermissions(r.permissions_value || 0), 0);
+                
+                document.getElementById('totalRoles').textContent = totalRoles;
+                document.getElementById('newRoles').textContent = newRoles;
+                document.getElementById('permsCount').textContent = totalPermissions;
+                
+                document.getElementById('statsSection').style.display = 'grid';
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // UTILITAIRES
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            hexToRGB(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? [
+                    parseInt(result[1], 16),
+                    parseInt(result[2], 16),
+                    parseInt(result[3], 16)
+                ] : [0, 0, 0];
+            }
+            
+            getRGBfromConfig(role) {
+                if (role.color) {
+                    const [r, g, b] = role.color;
+                    return `rgb(${r}, ${g}, ${b})`;
+                }
+                if (role.hex_color) {
+                    return role.hex_color;
+                }
+                return '#808080';
+            }
+            
+            countPermissions(value) {
+                // Compter le nombre de bits activés dans le bitfield
+                let count = 0;
+                let v = BigInt(value);
+                while (v > 0n) {
+                    count += Number(v & 1n);
+                    v >>= 1n;
+                }
+                return count;
+            }
+            
+            // ─────────────────────────────────────────────────────────────────────────
+            // NOTIFICATIONS
+            // ─────────────────────────────────────────────────────────────────────────
+            
+            showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideInRight 0.3s ease reverse';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        }
+        
+        // Initialiser l'application
+        const roleManager = new RoleManager();
+        
+        console.log('✅ Gestionnaire de Rôles Discord - Prêt!');
+    </script>
+</body>
+</html>

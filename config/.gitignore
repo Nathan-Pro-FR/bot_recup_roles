@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# CONFIGURATION .GITIGNORE - Gestionnaire de Rôles Discord
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Variables d'environnement (Sécurité : Contient le TOKEN !!!)
+.env
+.env.local
+.env.*.local
+config/.env
+
+# Environnement Python
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Éditeurs / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# Système d'exploitation
+.DS_Store
+Thumbs.db
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.bak
+.cache/
+
+# Données et sauvegardes du bot
+backup/
+secrets/
+# Ignorer les fichiers JSON de test locaux, mais NE PAS bloquer le reste
+*local*.json
+
+# Node (si ajout de JS plus tard)
+node_modules/
+package-lock.json
+npm-debug.log
+
+# Fichiers téléchargés
+downloads/
+*.pdf
+*.zip

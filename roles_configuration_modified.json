@@ -1,0 +1,392 @@
+[
+    {
+        "id": 1520987756212260900,
+        "name": "RôlesBot",
+        "position": 0,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 8,
+        "is_new": false
+    },
+    {
+        "id": 1148169954479325200,
+        "name": "Survey-Bot",
+        "position": 1,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 339008,
+        "is_new": false
+    },
+    {
+        "id": 1148170835237023900,
+        "name": "Subo the Survey Bot",
+        "position": 2,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 398090292240,
+        "is_new": false
+    },
+    {
+        "id": 1148171018897211400,
+        "name": "subo-creator",
+        "position": 3,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 0,
+        "is_new": false
+    },
+    {
+        "id": 278608,
+        "name": "test",
+        "position": 4,
+        "color": [
+            79,
+            231,
+            13
+        ],
+        "hex_color": "#4fe70d",
+        "permissions_value": 8,
+        "is_new": true
+    },
+    {
+        "id": 1148171193862606800,
+        "name": "Créateur",
+        "position": 5,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 0,
+        "is_new": false
+    },
+    {
+        "id": 1148171494770360400,
+        "name": "À VOTÉ(E)!",
+        "position": 6,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 0,
+        "is_new": false
+    },
+    {
+        "id": 1148177644026859500,
+        "name": "Bot game",
+        "position": 7,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 2146958847,
+        "is_new": false
+    },
+    {
+        "id": 1148209434733060100,
+        "name": "MyBot",
+        "position": 8,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 3080,
+        "is_new": false
+    },
+    {
+        "id": 1150147717385965700,
+        "name": "Sheri Blossom",
+        "position": 9,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 535733599448,
+        "is_new": false
+    },
+    {
+        "id": 1151522913569210500,
+        "name": "Martine",
+        "position": 10,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 536870387191,
+        "is_new": false
+    },
+    {
+        "id": 1340311133793554700,
+        "name": "Booster",
+        "position": 11,
+        "color": [
+            155,
+            89,
+            182
+        ],
+        "hex_color": "#9b59b6",
+        "permissions_value": 0,
+        "is_new": false
+    },
+    {
+        "id": 1152948225586765800,
+        "name": "POTE",
+        "position": 12,
+        "color": [
+            52,
+            152,
+            219
+        ],
+        "hex_color": "#3498db",
+        "permissions_value": 0,
+        "is_new": false
+    },
+    {
+        "id": 1167490409681911800,
+        "name": "ServerStats",
+        "position": 13,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 1166352,
+        "is_new": false
+    },
+    {
+        "id": 1167491318633726000,
+        "name": "Statbot",
+        "position": 14,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 269601936,
+        "is_new": false
+    },
+    {
+        "id": 1177989386009325600,
+        "name": "Eevee",
+        "position": 15,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 532579405120,
+        "is_new": false
+    },
+    {
+        "id": 1316403808036720600,
+        "name": "Kōri",
+        "position": 16,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 268487750,
+        "is_new": false
+    },
+    {
+        "id": 1316404815877771300,
+        "name": "Ecchi Bot",
+        "position": 17,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 137439267904,
+        "is_new": false
+    },
+    {
+        "id": 1317814412404330500,
+        "name": "Mudae",
+        "position": 18,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 288832,
+        "is_new": false
+    },
+    {
+        "id": 1317817062927761700,
+        "name": "RinBot",
+        "position": 19,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 3197952,
+        "is_new": false
+    },
+    {
+        "id": 1317820301916246000,
+        "name": "Mudae GM",
+        "position": 20,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 288832,
+        "is_new": false
+    },
+    {
+        "id": 1318570559851856000,
+        "name": "SaucyBot",
+        "position": 21,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 274878032896,
+        "is_new": false
+    },
+    {
+        "id": 1319994956919865300,
+        "name": "Maître du village",
+        "position": 22,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 8,
+        "is_new": false
+    },
+    {
+        "id": 1321456294363922400,
+        "name": "Albedo",
+        "position": 23,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 8,
+        "is_new": false
+    },
+    {
+        "id": 1340313139287425000,
+        "name": "ProBot ✨",
+        "position": 24,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 2080374975,
+        "is_new": false
+    },
+    {
+        "id": 1362355953025945600,
+        "name": "AppBot",
+        "position": 25,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 8,
+        "is_new": false
+    },
+    {
+        "id": 1370728153156292600,
+        "name": "UnbelievaBoat",
+        "position": 26,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 829811966,
+        "is_new": false
+    },
+    {
+        "id": 1399093344306462700,
+        "name": "Wick",
+        "position": 27,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 8,
+        "is_new": false
+    },
+    {
+        "id": 1498650636185636900,
+        "name": "Quark Logger",
+        "position": 28,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 1374926785710,
+        "is_new": false
+    },
+    {
+        "id": 1498662551733535000,
+        "name": "ZeroTsu",
+        "position": 29,
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "hex_color": "#000000",
+        "permissions_value": 292930546752,
+        "is_new": false
+    }
+]
